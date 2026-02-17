@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { DareCategory, categoryStyles } from "../lib/dares";
@@ -28,7 +28,14 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+        {/* Step indicators */}
+        <View style={styles.dots}>
+          {[0, 1, 2].map((i) => (
+            <View key={i} style={[styles.dot, i === step && styles.dotActive]} />
+          ))}
+        </View>
+
         {step === 0 && (
           <View style={styles.card}>
             <Image source={require("../assets/mascot/main.png")} style={styles.mascot} />
@@ -97,7 +104,7 @@ export default function OnboardingScreen() {
             </Pressable>
           )}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -112,6 +119,21 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: "center",
     gap: 24
+  },
+  dots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 8
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#F0E6DE"
+  },
+  dotActive: {
+    backgroundColor: "#FF8C7C",
+    width: 24
   },
   card: {
     backgroundColor: "#FFFFFF",

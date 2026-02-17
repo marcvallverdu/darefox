@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     gap: 12
   },
   card: {
-    width: "48%",
+    flexBasis: "46%",
+    flexGrow: 1,
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 14,

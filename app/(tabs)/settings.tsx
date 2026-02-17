@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Alert, Pressable, StyleSheet, Switch, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "expo-router";
 import {
@@ -107,10 +107,10 @@ export default function SettingsScreen() {
         <Text style={styles.title}>Settings</Text>
         <Text style={styles.subtitle}>Customize your daily dare routine.</Text>
       </View>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.row}>
-            <View>
+            <View style={styles.labelWrap}>
               <Text style={styles.cardTitle}>Daily Reminder</Text>
               <Text style={styles.cardSubtitle}>Every day at 8:00 AM</Text>
             </View>
@@ -124,7 +124,7 @@ export default function SettingsScreen() {
         </View>
         <View style={styles.card}>
           <View style={styles.row}>
-            <View>
+            <View style={styles.labelWrap}>
               <Text style={styles.cardTitle}>Weekly Summary</Text>
               <Text style={styles.cardSubtitle}>Sundays at 10:00 AM</Text>
             </View>
@@ -140,7 +140,7 @@ export default function SettingsScreen() {
         <Pressable style={({ pressed }) => [styles.resetButton, pressed && styles.resetPressed]} onPress={handleReset}>
           <Text style={styles.resetText}>Reset All Data</Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -166,7 +166,12 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
+    paddingBottom: 120,
     gap: 20
+  },
+  labelWrap: {
+    flex: 1,
+    marginRight: 12
   },
   card: {
     backgroundColor: "#FFFFFF",

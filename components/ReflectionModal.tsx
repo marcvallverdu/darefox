@@ -10,7 +10,11 @@ type ReflectionModalProps = {
   onSave: (reflection: { emoji: ReflectionEmoji; note: string }) => void;
 };
 
-const EMOJIS: ReflectionEmoji[] = ["😰", "😊", "🔥"];
+const EMOJIS: { emoji: ReflectionEmoji; label: string }[] = [
+  { emoji: "😰", label: "Scary" },
+  { emoji: "😊", label: "Good" },
+  { emoji: "🔥", label: "Amazing" }
+];
 
 export const ReflectionModal = ({ visible, onClose, onSave }: ReflectionModalProps) => {
   const [selected, setSelected] = useState<ReflectionEmoji>("😊");
@@ -38,7 +42,7 @@ export const ReflectionModal = ({ visible, onClose, onSave }: ReflectionModalPro
         <View style={styles.card}>
           <Text style={styles.title}>How did it feel?</Text>
           <View style={styles.emojiRow}>
-            {EMOJIS.map((emoji) => {
+            {EMOJIS.map(({ emoji, label }) => {
               const active = emoji === selected;
               return (
                 <Pressable
@@ -47,6 +51,7 @@ export const ReflectionModal = ({ visible, onClose, onSave }: ReflectionModalPro
                   style={[styles.emojiButton, active && styles.emojiButtonActive]}
                 >
                   <Text style={styles.emojiText}>{emoji}</Text>
+                  <Text style={[styles.emojiLabel, active && styles.emojiLabelActive]}>{label}</Text>
                 </Pressable>
               );
             })}
@@ -121,6 +126,15 @@ const styles = StyleSheet.create({
   },
   emojiText: {
     fontSize: 24
+  },
+  emojiLabel: {
+    marginTop: 4,
+    fontSize: 11,
+    color: "#9B8579",
+    fontWeight: "600"
+  },
+  emojiLabelActive: {
+    color: "#E87461"
   },
   noteWrap: {
     marginTop: 16,

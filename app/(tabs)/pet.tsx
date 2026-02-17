@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "expo-router";
 import { BadgeGrid } from "../../components/BadgeGrid";
@@ -16,7 +16,6 @@ export default function PetScreen() {
   const [completedCount, setCompletedCount] = useState(0);
   const [streak, setStreak] = useState(0);
   const [longestStreak, setLongestStreak] = useState(0);
-  const [firstDareDate, setFirstDareDate] = useState<string | null>(null);
 
   const loadPet = useCallback(async () => {
     const [storedXp, storedName, completedDares, storedStreak, storedLongest, storedFirstDate] =
@@ -33,7 +32,6 @@ export default function PetScreen() {
     setCompletedCount(completedDares.length);
     setStreak(storedStreak);
     setLongestStreak(storedLongest);
-    setFirstDareDate(storedFirstDate);
 
     const progress = {
       completedDares,
@@ -57,31 +55,33 @@ export default function PetScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <Text style={styles.title}>
-          {foxName} — Level {pet.level}
-        </Text>
-        <Text style={styles.subtitle}>
-          {completedCount === 0 ? "Complete dares to grow your courage." : "Your courage keeps growing."}
-        </Text>
-      </View>
-      <View style={styles.content}>
-        <PetDisplay xp={xp} />
-        <View style={styles.stats}>
-          <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Total XP</Text>
-            <Text style={styles.statValue}>{pet.xp}</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            {foxName} — Level {pet.level}
+          </Text>
+          <Text style={styles.subtitle}>
+            {completedCount === 0 ? "Complete dares to grow your courage." : "Your courage keeps growing."}
+          </Text>
+        </View>
+        <View style={styles.content}>
+          <PetDisplay xp={xp} />
+          <View style={styles.stats}>
+            <View style={styles.statCard}>
+              <Text style={styles.statLabel}>Total XP</Text>
+              <Text style={styles.statValue}>{pet.xp}</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={styles.statLabel}>Best Streak</Text>
+              <Text style={styles.statValue}>{Math.max(streak, longestStreak)}</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Best Streak</Text>
-            <Text style={styles.statValue}>{Math.max(streak, longestStreak)}</Text>
+          <View style={styles.badgeSection}>
+            <Text style={styles.badgeTitle}>Courage Badges</Text>
+            <BadgeGrid earnedIds={earnedBadges} />
           </View>
         </View>
-        <View style={styles.badgeSection}>
-          <Text style={styles.badgeTitle}>Courage Badges</Text>
-          <BadgeGrid earnedIds={earnedBadges} />
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: "#FFF8F0"
+  },
+  scrollContent: {
+    paddingBottom: 120
   },
   header: {
     padding: 24,
