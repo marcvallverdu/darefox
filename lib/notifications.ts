@@ -30,7 +30,7 @@ export const configureAndroidChannel = async () => {
     name: "Daily Dare",
     importance: Notifications.AndroidImportance.DEFAULT,
     vibrationPattern: [0, 250, 250, 250],
-    lightColor: "#4CAF50"
+    lightColor: "#FF8C7C"
   });
 };
 

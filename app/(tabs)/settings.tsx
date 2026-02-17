@@ -72,7 +72,7 @@ export default function SettingsScreen() {
             <Switch
               value={notificationsEnabled}
               onValueChange={handleToggleNotifications}
-              trackColor={{ true: "#4CAF50", false: "#D5DADF" }}
+              trackColor={{ true: "#A8E6CF", false: "#F0E6DE" }}
               thumbColor="#FFFFFF"
             />
           </View>
@@ -89,34 +89,34 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F2F4F5"
+    backgroundColor: "#FFF8F0"
   },
   header: {
-    padding: 20,
+    padding: 24,
     paddingBottom: 10
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   subtitle: {
     marginTop: 4,
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
   },
   content: {
-    padding: 20,
+    padding: 24,
     gap: 20
   },
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 16,
-    shadowColor: "#0B1A26",
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 24,
+    padding: 24,
+    shadowColor: "#E8C4A8",
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
     elevation: 2
   },
   row: {
@@ -126,13 +126,13 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   cardSubtitle: {
     marginTop: 4,
     fontSize: 12,
-    color: "#888888"
+    color: "#9B8579"
   },
   resetButton: {
     backgroundColor: "#FFFFFF",
@@ -140,14 +140,14 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#F1C1C1"
+    borderColor: "#FFD4CC"
   },
   resetPressed: {
     opacity: 0.8
   },
   resetText: {
-    color: "#C55353",
-    fontWeight: "700",
+    color: "#E87461",
+    fontWeight: "600",
     fontSize: 16
   }
 });

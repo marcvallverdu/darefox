@@ -75,35 +75,35 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F2F4F5"
+    backgroundColor: "#FFF8F0"
   },
   header: {
-    padding: 20,
+    padding: 24,
     paddingBottom: 10
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   subtitle: {
     marginTop: 4,
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
   },
   list: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 120,
     gap: 16
   },
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 16,
-    shadowColor: "#0B1A26",
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 24,
+    padding: 24,
+    shadowColor: "#E8C4A8",
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
     elevation: 2
   },
   cardHeader: {
@@ -122,13 +122,13 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 12,
-    color: "#888888"
+    color: "#9B8579"
   },
   text: {
     marginTop: 12,
     fontSize: 16,
     fontWeight: "600",
-    color: "#1A1A1A"
+    color: "#4A3728"
   },
   emptyState: {
     flex: 1,
@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   emptyText: {
     fontSize: 14,
-    color: "#888888",
+    color: "#9B8579",
     textAlign: "center"
   }
 });

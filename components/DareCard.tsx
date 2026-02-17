@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Dare, categoryStyles } from "../lib/dares";
 
 const difficultyLabels = ["Comfort Zone", "Brave", "Legendary"] as const;
@@ -16,7 +16,7 @@ export const DareCard = ({ dare }: DareCardProps) => {
       </View>
       <Text style={styles.dareText}>{dare.text}</Text>
       <View style={styles.foxWrap}>
-        <Text style={styles.fox}>🦊</Text>
+        <Image source={require("../assets/mascot/main.png")} style={styles.fox} />
       </View>
       <View style={styles.difficultyRow}>
         {difficultyLabels.map((label, index) => {
@@ -35,9 +35,9 @@ export const DareCard = ({ dare }: DareCardProps) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 22,
-    padding: 20,
-    shadowColor: "#0B1A26",
+    borderRadius: 24,
+    padding: 24,
+    shadowColor: "#E8C4A8",
     shadowOpacity: 0.08,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 6 },
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   dareText: {
     marginTop: 16,
     fontSize: 22,
-    fontWeight: "700",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   foxWrap: {
     marginTop: 18,
@@ -65,7 +65,9 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   fox: {
-    fontSize: 64
+    width: 48,
+    height: 48,
+    borderRadius: 24
   },
   difficultyRow: {
     marginTop: 16,
@@ -78,19 +80,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: "#E3E6EA",
-    backgroundColor: "#F7F8FA"
+    borderColor: "#F0E6DE",
+    backgroundColor: "#FFF8F0"
   },
   difficultyPillActive: {
-    backgroundColor: "#E8F5E9",
-    borderColor: "#4CAF50"
+    backgroundColor: "#FFE9E4",
+    borderColor: "#FF8C7C"
   },
   difficultyText: {
     fontSize: 12,
-    color: "#888888",
+    color: "#9B8579",
     fontWeight: "600"
   },
   difficultyTextActive: {
-    color: "#2F7A52"
+    color: "#E87461"
   }
 });

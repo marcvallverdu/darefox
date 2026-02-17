@@ -103,9 +103,9 @@ export const getDailyDare = (dateKey: string, recentIds: string[]) => {
 };
 
 export const categoryStyles: Record<DareCategory, { background: string; text: string }> = {
-  Social: { background: "#FDE7EA", text: "#B9375E" },
-  Physical: { background: "#E8F3FF", text: "#2D6AA3" },
-  Creative: { background: "#F3E8FF", text: "#6A3FA0" },
-  Mindful: { background: "#E8F7EE", text: "#2F7A52" },
-  Random: { background: "#FFF4E5", text: "#B85C00" }
+  Social: { background: "#FFE5E5", text: "#D4726A" },
+  Physical: { background: "#E5F0FF", text: "#6A8FD4" },
+  Creative: { background: "#FFF0E5", text: "#D4976A" },
+  Mindful: { background: "#E5FFE8", text: "#6AD47A" },
+  Random: { background: "#F0E5FF", text: "#9B6AD4" }
 };

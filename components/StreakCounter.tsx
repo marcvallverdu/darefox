@@ -23,22 +23,23 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    shadowColor: "#0B1A26",
+    shadowColor: "#E8C4A8",
     shadowOpacity: 0.08,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
     elevation: 3
   },
   icon: {
-    fontSize: 20
+    fontSize: 20,
+    color: "#FF8C7C"
   },
   count: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   label: {
     fontSize: 12,
-    color: "#888888"
+    color: "#9B8579"
   }
 });

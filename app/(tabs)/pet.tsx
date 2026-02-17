@@ -48,24 +48,24 @@ export default function PetScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F2F4F5"
+    backgroundColor: "#FFF8F0"
   },
   header: {
-    padding: 20,
+    padding: 24,
     paddingBottom: 10
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   subtitle: {
     marginTop: 4,
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
   },
   content: {
-    padding: 20,
+    padding: 24,
     gap: 20
   },
   stats: {
@@ -75,22 +75,22 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    borderRadius: 18,
-    padding: 16,
-    shadowColor: "#0B1A26",
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 24,
+    padding: 24,
+    shadowColor: "#E8C4A8",
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
     elevation: 2
   },
   statLabel: {
     fontSize: 12,
-    color: "#888888"
+    color: "#9B8579"
   },
   statValue: {
     marginTop: 6,
     fontSize: 20,
-    fontWeight: "700",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   }
 });

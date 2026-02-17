@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { DareCard } from "../../components/DareCard";
@@ -128,7 +128,7 @@ export default function HomeScreen() {
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.loadingWrap}>
-          <ActivityIndicator size="large" color="#4CAF50" />
+          <ActivityIndicator size="large" color="#FF8C7C" />
           <Text style={styles.loadingText}>Finding your dare...</Text>
         </View>
       </SafeAreaView>
@@ -144,6 +144,23 @@ export default function HomeScreen() {
             <Text style={styles.subtitle}>{formatDisplayDate(dateKey)}</Text>
           </View>
           <StreakCounter streak={streak} />
+        </View>
+
+        <View style={styles.mascotRow}>
+          <Image
+            source={
+              completedToday
+                ? require("../../assets/mascot/celebrate.png")
+                : require("../../assets/mascot/main.png")
+            }
+            style={styles.mascot}
+          />
+          <View style={styles.greeting}>
+            <Text style={styles.greetingTitle}>Ready for today's dare?</Text>
+            <Text style={styles.greetingSubtitle}>
+              Your fox friend is cheering you on.
+            </Text>
+          </View>
         </View>
 
         <View style={styles.cardWrap}>
@@ -171,10 +188,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F2F4F5"
+    backgroundColor: "#FFF8F0"
   },
   container: {
-    padding: 20,
+    padding: 24,
     paddingBottom: 120,
     gap: 20
   },
@@ -185,19 +202,50 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "800",
-    color: "#1A1A1A"
+    fontWeight: "600",
+    color: "#4A3728"
   },
   subtitle: {
     marginTop: 4,
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
+  },
+  mascotRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 16,
+    shadowColor: "#E8C4A8",
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3
+  },
+  mascot: {
+    width: 120,
+    height: 120,
+    resizeMode: "contain"
+  },
+  greeting: {
+    flex: 1,
+    gap: 6
+  },
+  greetingTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#4A3728"
+  },
+  greetingSubtitle: {
+    fontSize: 13,
+    color: "#9B8579"
   },
   cardWrap: {
     marginTop: 4
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#FF8C7C",
     borderRadius: 18,
     paddingVertical: 16,
     alignItems: "center"
@@ -206,17 +254,17 @@ const styles = StyleSheet.create({
     opacity: 0.85
   },
   buttonDisabled: {
-    backgroundColor: "#9FD6A2"
+    backgroundColor: "#FFD4CC"
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "600",
     color: "#FFFFFF"
   },
   helperText: {
     textAlign: "center",
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
   },
   loadingWrap: {
     flex: 1,
@@ -226,6 +274,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: "#888888"
+    color: "#9B8579"
   }
 });

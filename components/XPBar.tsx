@@ -22,16 +22,16 @@ const styles = StyleSheet.create({
   track: {
     height: 10,
     borderRadius: 999,
-    backgroundColor: "#E6ECEF",
+    backgroundColor: "#F0E6DE",
     overflow: "hidden"
   },
   fill: {
     height: "100%",
     borderRadius: 999,
-    backgroundColor: "#4CAF50"
+    backgroundColor: "#A8E6CF"
   },
   label: {
     fontSize: 12,
-    color: "#888888"
+    color: "#9B8579"
   }
 });
