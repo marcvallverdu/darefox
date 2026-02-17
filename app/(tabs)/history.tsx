@@ -11,6 +11,11 @@ export type CompletedDare = {
   text: string;
   category: keyof typeof categoryStyles;
   difficulty: number;
+  reflection?: {
+    emoji: string;
+    note: string;
+  };
+  // Legacy flat fields
   reflectionEmoji?: string;
   reflectionNote?: string;
 };
@@ -62,12 +67,19 @@ export default function HistoryScreen() {
                     <Text style={[styles.badgeText, { color: badge.text }]}>{item.category}</Text>
                   </View>
                   <View style={styles.dateRow}>
-                    {item.reflectionEmoji ? <Text style={styles.emoji}>{item.reflectionEmoji}</Text> : null}
+                    {(item.reflection?.emoji || item.reflectionEmoji) ? (
+                      <Text style={styles.emoji}>{item.reflection?.emoji || item.reflectionEmoji}</Text>
+                    ) : null}
                     <Text style={styles.date}>{formatDate(item.date)}</Text>
                   </View>
                 </View>
                 <Text style={styles.text}>{item.text}</Text>
-                {item.reflectionNote ? <Text style={styles.note}>{item.reflectionNote}</Text> : null}
+                {(item.reflection?.note || item.reflectionNote) ? (
+                  <View style={styles.noteWrap}>
+                    <Text style={styles.noteLabel}>Reflection</Text>
+                    <Text style={styles.note}>{item.reflection?.note || item.reflectionNote}</Text>
+                  </View>
+                ) : null}
               </View>
             );
           }}
@@ -144,11 +156,25 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#4A3728"
   },
+  noteWrap: {
+    marginTop: 10,
+    backgroundColor: "#FFF8F0",
+    borderRadius: 12,
+    padding: 12,
+  },
+  noteLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#C4A99A",
+    marginBottom: 4,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
   note: {
-    marginTop: 8,
     fontSize: 13,
     fontStyle: "italic",
-    color: "#9B8579"
+    color: "#9B8579",
+    lineHeight: 18,
   },
   emptyState: {
     flex: 1,
