@@ -43,7 +43,7 @@ export const scheduleDailyReminder = async (dareText: string, hour = 8, minute =
       body: dareText,
       sound: "default"
     },
-    trigger: { hour, minute, repeats: true, channelId: "daily-dare" }
+    trigger: { type: "daily", hour, minute, channelId: "daily-dare" } as any
   });
 };
 
