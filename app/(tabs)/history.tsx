@@ -1,0 +1,153 @@
+import { useCallback, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "expo-router";
+import { categoryStyles } from "../../lib/dares";
+import { getJson } from "../../lib/storage";
+
+export type CompletedDare = {
+  id: string;
+  date: string;
+  text: string;
+  category: keyof typeof categoryStyles;
+  difficulty: number;
+};
+
+const formatDate = (dateKey: string) => {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  if (!year || !month || !day) return dateKey;
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+};
+
+export default function HistoryScreen() {
+  const [items, setItems] = useState<CompletedDare[]>([]);
+
+  const loadHistory = useCallback(async () => {
+    const history = await getJson<CompletedDare[]>("completedDares", []);
+    setItems(history);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadHistory();
+    }, [loadHistory])
+  );
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.header}>
+        <Text style={styles.title}>History</Text>
+        <Text style={styles.subtitle}>{items.length} dares completed</Text>
+      </View>
+      {items.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyEmoji}>📜</Text>
+          <Text style={styles.emptyTitle}>No dares yet</Text>
+          <Text style={styles.emptyText}>Complete today's dare to start your history.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={items}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          contentContainerStyle={styles.list}
+          renderItem={({ item }) => {
+            const badge = categoryStyles[item.category];
+            return (
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View style={[styles.badge, { backgroundColor: badge.background }]}> 
+                    <Text style={[styles.badgeText, { color: badge.text }]}>{item.category}</Text>
+                  </View>
+                  <Text style={styles.date}>{formatDate(item.date)}</Text>
+                </View>
+                <Text style={styles.text}>{item.text}</Text>
+              </View>
+            );
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: "#F2F4F5"
+  },
+  header: {
+    padding: 20,
+    paddingBottom: 10
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#1A1A1A"
+  },
+  subtitle: {
+    marginTop: 4,
+    fontSize: 14,
+    color: "#888888"
+  },
+  list: {
+    paddingHorizontal: 20,
+    paddingBottom: 120,
+    gap: 16
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#0B1A26",
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2
+  },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "600"
+  },
+  date: {
+    fontSize: 12,
+    color: "#888888"
+  },
+  text: {
+    marginTop: 12,
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1A1A1A"
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 40,
+    gap: 8
+  },
+  emptyEmoji: {
+    fontSize: 42
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#1A1A1A"
+  },
+  emptyText: {
+    fontSize: 14,
+    color: "#888888",
+    textAlign: "center"
+  }
+});
