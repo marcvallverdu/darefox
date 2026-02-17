@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { FoxMascot } from "../components/FoxMascot";
 import { DareCategory, categoryStyles } from "../lib/dares";
 import { setJson, setString } from "../lib/storage";
 
@@ -38,7 +39,7 @@ export default function OnboardingScreen() {
 
         {step === 0 && (
           <View style={styles.card}>
-            <Image source={require("../assets/mascot/main.png")} style={styles.mascot} />
+            <FoxMascot mood="idle" size={160} />
             <Text style={styles.title}>Welcome to DareFox!</Text>
             <Text style={styles.subtitle}>
               Complete daily courage dares and grow your fox companion.

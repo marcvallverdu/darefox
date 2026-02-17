@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { DareCard } from "../../components/DareCard";
 import { FoxDialogue } from "../../components/FoxDialogue";
+import { FoxMascot } from "../../components/FoxMascot";
 import { ReflectionModal, ReflectionEmoji } from "../../components/ReflectionModal";
 import { StreakCounter } from "../../components/StreakCounter";
 import { DARES, getDareById, getDailyDare } from "../../lib/dares";
@@ -236,13 +237,10 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.mascotRow}>
-          <Image
-            source={
-              completedToday
-                ? require("../../assets/mascot/celebrate.png")
-                : require("../../assets/mascot/main.png")
-            }
-            style={styles.mascot}
+          <FoxMascot
+            mood={completedToday ? "celebrate" : "idle"}
+            triggerCelebrate={completedToday}
+            size={120}
           />
           <View style={styles.greeting}>
             <Text style={styles.greetingTitle}>

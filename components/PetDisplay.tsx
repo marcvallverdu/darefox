@@ -1,30 +1,27 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { getLevelFromXp } from "../lib/pet";
+import { FoxMascot, FoxMood } from "./FoxMascot";
 import { XPBar } from "./XPBar";
 
 type PetDisplayProps = {
   xp: number;
 };
 
+const LEVEL_MOOD: Record<number, FoxMood> = {
+  1: "timid",
+  2: "idle",
+  3: "brave",
+  4: "brave",
+  5: "celebrate",
+};
+
 export const PetDisplay = ({ xp }: PetDisplayProps) => {
   const pet = getLevelFromXp(xp);
-  const mascotSource = (() => {
-    switch (pet.level) {
-      case 1:
-        return require("../assets/mascot/timid.png");
-      case 2:
-        return require("../assets/mascot/main.png");
-      case 3:
-        return require("../assets/mascot/brave.png");
-      case 4:
-        return require("../assets/mascot/brave.png");
-      default:
-        return require("../assets/mascot/celebrate.png");
-    }
-  })();
+  const mood = LEVEL_MOOD[pet.level] ?? "celebrate";
+
   return (
     <View style={styles.card}>
-      <Image source={mascotSource} style={styles.fox} />
+      <FoxMascot mood={mood} size={140} />
       <Text style={styles.levelTitle}>{pet.levelName}</Text>
       <Text style={styles.levelSubtitle}>Level {pet.level}</Text>
       <XPBar
@@ -46,20 +43,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 6 },
-    elevation: 4
-  },
-  fox: {
-    width: 140,
-    height: 140,
-    resizeMode: "contain"
+    elevation: 4,
   },
   levelTitle: {
     fontSize: 22,
     fontWeight: "600",
-    color: "#4A3728"
+    color: "#4A3728",
   },
   levelSubtitle: {
     fontSize: 14,
-    color: "#9B8579"
-  }
+    color: "#9B8579",
+  },
 });
