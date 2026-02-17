@@ -3,8 +3,11 @@ import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Tex
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { DareCard } from "../../components/DareCard";
+import { FoxDialogue } from "../../components/FoxDialogue";
+import { ReflectionModal, ReflectionEmoji } from "../../components/ReflectionModal";
 import { StreakCounter } from "../../components/StreakCounter";
 import { DARES, getDareById, getDailyDare } from "../../lib/dares";
+import { getFoxMessage } from "../../lib/foxPersonality";
 import { addXp, XP_PER_DARE } from "../../lib/pet";
 import { ensureNotificationPermissions, scheduleDailyReminder } from "../../lib/notifications";
 import { getJson, getNumber, getString, setJson, setNumber, setString } from "../../lib/storage";
@@ -30,28 +33,75 @@ export default function HomeScreen() {
   const [completedToday, setCompletedToday] = useState(false);
   const [lastCompletedDate, setLastCompletedDate] = useState<string | null>(null);
   const [dateKey, setDateKey] = useState(getDateKey());
+  const [foxName, setFoxName] = useState("Fox");
+  const [reflectionVisible, setReflectionVisible] = useState(false);
+  const [shieldAvailable, setShieldAvailable] = useState(false);
 
   const dare = useMemo(() => (dareId ? getDareById(dareId) : null), [dareId]);
+  const foxMessage = useMemo(() => {
+    if (!dare) return "";
+    const context = completedToday ? "completion" : "morning";
+    return getFoxMessage({
+      context,
+      foxName,
+      dateKey,
+      category: completedToday ? dare.category : undefined
+    });
+  }, [completedToday, dare, dateKey, foxName]);
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const today = getDateKey();
+      const yesterday = getDateKey(-1);
+      const dayBeforeYesterday = getDateKey(-2);
       setDateKey(today);
 
-      const [storedStreak, storedLastCompleted, storedXp, storedDailyDate, storedDailyId] =
+      const [
+        storedStreak,
+        storedLastCompleted,
+        storedXp,
+        storedDailyDate,
+        storedDailyId,
+        storedShieldAvailable,
+        storedFoxName
+      ] =
         await Promise.all([
           getNumber("streak"),
           getString("lastCompletedDate"),
           getNumber("petXp"),
           getString("dailyDareDate"),
-          getString("dailyDareId")
+          getString("dailyDareId"),
+          getJson<boolean>("shieldAvailable", true),
+          getString("foxName")
         ]);
 
-      setStreak(storedStreak);
+      let nextStreak = storedStreak;
+      let nextLastCompleted = storedLastCompleted;
+      let nextShieldAvailable = storedShieldAvailable;
+
+      if (storedLastCompleted && storedLastCompleted !== today && storedLastCompleted !== yesterday && storedStreak > 0) {
+        if (storedShieldAvailable && storedLastCompleted === dayBeforeYesterday) {
+          nextShieldAvailable = false;
+          nextLastCompleted = yesterday;
+          await Promise.all([
+            setJson("shieldAvailable", false),
+            setString("lastShieldUsedDate", today),
+            setString("lastCompletedDate", yesterday)
+          ]);
+          Alert.alert("Shield used!", "Your streak was protected for a missed day.");
+        } else {
+          nextStreak = 0;
+          await setNumber("streak", 0);
+        }
+      }
+
+      setStreak(nextStreak);
       setPetXp(storedXp);
-      setLastCompletedDate(storedLastCompleted);
-      setCompletedToday(storedLastCompleted === today);
+      setLastCompletedDate(nextLastCompleted);
+      setCompletedToday(nextLastCompleted === today);
+      setShieldAvailable(nextShieldAvailable);
+      setFoxName(storedFoxName ?? "Fox");
 
       const recentIds = await getJson<string[]>("recentDareIds", []);
       let nextDareId = storedDailyId;
@@ -87,7 +137,7 @@ export default function HomeScreen() {
     loadData();
   }, [loadData]);
 
-  const handleComplete = async () => {
+  const handleComplete = async (reflection: { emoji: ReflectionEmoji; note: string }) => {
     if (!dare || completedToday) return;
 
     try {
@@ -99,20 +149,29 @@ export default function HomeScreen() {
 
       const updatedXp = addXp(petXp, XP_PER_DARE);
 
-      const completedDares = await getJson<any[]>("completedDares", []);
+      const [completedDares, storedLongest, storedFirstDate] = await Promise.all([
+        getJson<any[]>("completedDares", []),
+        getNumber("longestStreak"),
+        getString("firstDareDate")
+      ]);
       const newEntry = {
         id: dare.id,
         date: today,
         text: dare.text,
         category: dare.category,
-        difficulty: dare.difficulty
+        difficulty: dare.difficulty,
+        reflection
       };
+      const nextLongest = Math.max(storedLongest, newStreak);
+      const firstDate = storedFirstDate ?? today;
 
       await Promise.all([
         setNumber("streak", newStreak),
         setString("lastCompletedDate", today),
         setNumber("petXp", updatedXp),
-        setJson("completedDares", [newEntry, ...completedDares])
+        setJson("completedDares", [newEntry, ...completedDares]),
+        setNumber("longestStreak", nextLongest),
+        setString("firstDareDate", firstDate)
       ]);
 
       setStreak(newStreak);
@@ -122,6 +181,16 @@ export default function HomeScreen() {
     } catch (error) {
       Alert.alert("Oops", "We couldn't save your progress. Please try again.");
     }
+  };
+
+  const handleCompletePress = () => {
+    if (!dare || completedToday) return;
+    setReflectionVisible(true);
+  };
+
+  const handleReflectionSave = async (reflection: { emoji: ReflectionEmoji; note: string }) => {
+    setReflectionVisible(false);
+    await handleComplete(reflection);
   };
 
   if (loading || !dare) {
@@ -143,7 +212,10 @@ export default function HomeScreen() {
             <Text style={styles.title}>DareFox</Text>
             <Text style={styles.subtitle}>{formatDisplayDate(dateKey)}</Text>
           </View>
-          <StreakCounter streak={streak} />
+          <View style={styles.streakRow}>
+            <StreakCounter streak={streak} />
+            {shieldAvailable && <Text style={styles.shieldIcon}>🛡️</Text>}
+          </View>
         </View>
 
         <View style={styles.mascotRow}>
@@ -157,14 +229,14 @@ export default function HomeScreen() {
           />
           <View style={styles.greeting}>
             <Text style={styles.greetingTitle}>Ready for today's dare?</Text>
-            <Text style={styles.greetingSubtitle}>
-              Your fox friend is cheering you on.
-            </Text>
+            <Text style={styles.greetingSubtitle}>{foxName} is cheering you on!</Text>
           </View>
         </View>
 
+        <FoxDialogue message={foxMessage} />
+
         <View style={styles.cardWrap}>
-          <DareCard dare={dare} />
+          <DareCard dare={dare} animate={!completedToday} />
         </View>
 
         <Pressable
@@ -173,7 +245,7 @@ export default function HomeScreen() {
             completedToday && styles.buttonDisabled,
             pressed && !completedToday && styles.buttonPressed
           ]}
-          onPress={handleComplete}
+          onPress={handleCompletePress}
         >
           <Text style={styles.buttonText}>{completedToday ? "Completed!" : "I Did It!"}</Text>
         </Pressable>
@@ -181,6 +253,11 @@ export default function HomeScreen() {
           {completedToday ? "Great work! Come back tomorrow for a new dare." : "Tap to log your dare and build your streak."}
         </Text>
       </ScrollView>
+      <ReflectionModal
+        visible={reflectionVisible}
+        onClose={() => setReflectionVisible(false)}
+        onSave={handleReflectionSave}
+      />
     </SafeAreaView>
   );
 }
@@ -199,6 +276,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
+  },
+  streakRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8
+  },
+  shieldIcon: {
+    fontSize: 18
   },
   title: {
     fontSize: 30,

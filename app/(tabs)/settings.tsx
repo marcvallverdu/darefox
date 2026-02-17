@@ -2,16 +2,27 @@ import { useCallback, useState } from "react";
 import { Alert, Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "expo-router";
-import { cancelDailyReminder, ensureNotificationPermissions, scheduleDailyReminder } from "../../lib/notifications";
-import { getJson, resetAll, setJson } from "../../lib/storage";
+import {
+  cancelDailyReminder,
+  cancelWeeklySummary,
+  ensureNotificationPermissions,
+  scheduleDailyReminder,
+  scheduleWeeklySummary
+} from "../../lib/notifications";
+import { getJson, getString, resetAll, setJson } from "../../lib/storage";
 import { getDareById } from "../../lib/dares";
 
 export default function SettingsScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [weeklySummaryEnabled, setWeeklySummaryEnabled] = useState(true);
 
   const loadSettings = useCallback(async () => {
-    const enabled = await getJson<boolean>("notificationsEnabled", true);
+    const [enabled, weeklyEnabled] = await Promise.all([
+      getJson<boolean>("notificationsEnabled", true),
+      getJson<boolean>("weeklySummaryEnabled", true)
+    ]);
     setNotificationsEnabled(enabled);
+    setWeeklySummaryEnabled(weeklyEnabled);
   }, []);
 
   useFocusEffect(
@@ -41,6 +52,39 @@ export default function SettingsScreen() {
     await scheduleDailyReminder(dareText ?? "Ready for today's dare?");
   };
 
+  const buildWeeklySummary = async () => {
+    const [completed, storedName] = await Promise.all([
+      getJson<{ date: string }[]>("completedDares", []),
+      getString("foxName")
+    ]);
+    const foxName = storedName ?? "Fox";
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setDate(now.getDate() - 6);
+    const count = completed.filter((entry) => new Date(entry.date) >= cutoff).length;
+    return `You completed ${count} dares this week! ${foxName} is proud 🦊`;
+  };
+
+  const handleToggleWeeklySummary = async (value: boolean) => {
+    setWeeklySummaryEnabled(value);
+    await setJson("weeklySummaryEnabled", value);
+    if (!value) {
+      await cancelWeeklySummary();
+      return;
+    }
+
+    const hasPermission = await ensureNotificationPermissions();
+    if (!hasPermission) {
+      Alert.alert("Permission needed", "Enable notifications in your device settings to receive weekly summaries.");
+      setWeeklySummaryEnabled(false);
+      await setJson("weeklySummaryEnabled", false);
+      return;
+    }
+
+    const summary = await buildWeeklySummary();
+    await scheduleWeeklySummary(summary);
+  };
+
   const handleReset = () => {
     Alert.alert("Reset all data?", "This will clear your streak, history, and pet progress.", [
       { text: "Cancel", style: "cancel" },
@@ -50,6 +94,7 @@ export default function SettingsScreen() {
         onPress: async () => {
           await resetAll();
           setNotificationsEnabled(true);
+          setWeeklySummaryEnabled(true);
           Alert.alert("All set", "Your data has been reset.");
         }
       }
@@ -72,6 +117,20 @@ export default function SettingsScreen() {
             <Switch
               value={notificationsEnabled}
               onValueChange={handleToggleNotifications}
+              trackColor={{ true: "#A8E6CF", false: "#F0E6DE" }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+        </View>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View>
+              <Text style={styles.cardTitle}>Weekly Summary</Text>
+              <Text style={styles.cardSubtitle}>Sundays at 10:00 AM</Text>
+            </View>
+            <Switch
+              value={weeklySummaryEnabled}
+              onValueChange={handleToggleWeeklySummary}
               trackColor={{ true: "#A8E6CF", false: "#F0E6DE" }}
               thumbColor="#FFFFFF"
             />

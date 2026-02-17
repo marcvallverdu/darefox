@@ -11,6 +11,8 @@ export type CompletedDare = {
   text: string;
   category: keyof typeof categoryStyles;
   difficulty: number;
+  reflectionEmoji?: string;
+  reflectionNote?: string;
 };
 
 const formatDate = (dateKey: string) => {
@@ -59,9 +61,13 @@ export default function HistoryScreen() {
                   <View style={[styles.badge, { backgroundColor: badge.background }]}> 
                     <Text style={[styles.badgeText, { color: badge.text }]}>{item.category}</Text>
                   </View>
-                  <Text style={styles.date}>{formatDate(item.date)}</Text>
+                  <View style={styles.dateRow}>
+                    {item.reflectionEmoji ? <Text style={styles.emoji}>{item.reflectionEmoji}</Text> : null}
+                    <Text style={styles.date}>{formatDate(item.date)}</Text>
+                  </View>
                 </View>
                 <Text style={styles.text}>{item.text}</Text>
+                {item.reflectionNote ? <Text style={styles.note}>{item.reflectionNote}</Text> : null}
               </View>
             );
           }}
@@ -124,11 +130,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#9B8579"
   },
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6
+  },
+  emoji: {
+    fontSize: 14
+  },
   text: {
     marginTop: 12,
     fontSize: 16,
     fontWeight: "600",
     color: "#4A3728"
+  },
+  note: {
+    marginTop: 8,
+    fontSize: 13,
+    fontStyle: "italic",
+    color: "#9B8579"
   },
   emptyState: {
     flex: 1,

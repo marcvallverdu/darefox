@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { getString, setString } from "./storage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -36,8 +37,11 @@ export const configureAndroidChannel = async () => {
 
 export const scheduleDailyReminder = async (dareText: string, hour = 8, minute = 0) => {
   await configureAndroidChannel();
-  await Notifications.cancelAllScheduledNotificationsAsync();
-  return Notifications.scheduleNotificationAsync({
+  const existingId = await getString("dailyNotificationId");
+  if (existingId) {
+    await Notifications.cancelScheduledNotificationAsync(existingId);
+  }
+  const notificationId = await Notifications.scheduleNotificationAsync({
     content: {
       title: "Today's Dare",
       body: dareText,
@@ -45,8 +49,38 @@ export const scheduleDailyReminder = async (dareText: string, hour = 8, minute =
     },
     trigger: { type: "daily", hour, minute, channelId: "daily-dare" } as any
   });
+  await setString("dailyNotificationId", notificationId);
+  return notificationId;
 };
 
 export const cancelDailyReminder = async () => {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+  const existingId = await getString("dailyNotificationId");
+  if (existingId) {
+    await Notifications.cancelScheduledNotificationAsync(existingId);
+  }
+};
+
+export const scheduleWeeklySummary = async (summaryText: string, hour = 10, minute = 0) => {
+  await configureAndroidChannel();
+  const existingId = await getString("weeklySummaryNotificationId");
+  if (existingId) {
+    await Notifications.cancelScheduledNotificationAsync(existingId);
+  }
+  const notificationId = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Weekly Courage Summary",
+      body: summaryText,
+      sound: "default"
+    },
+    trigger: { weekday: 1, hour, minute, repeats: true, channelId: "daily-dare" } as any
+  });
+  await setString("weeklySummaryNotificationId", notificationId);
+  return notificationId;
+};
+
+export const cancelWeeklySummary = async () => {
+  const existingId = await getString("weeklySummaryNotificationId");
+  if (existingId) {
+    await Notifications.cancelScheduledNotificationAsync(existingId);
+  }
 };

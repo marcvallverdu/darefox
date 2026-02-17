@@ -2,13 +2,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const KEYS = {
   streak: "darefox:streak",
+  longestStreak: "darefox:longestStreak",
+  firstDareDate: "darefox:firstDareDate",
   lastCompletedDate: "darefox:lastCompletedDate",
   completedDares: "darefox:completedDares",
   petXp: "darefox:petXp",
   dailyDareDate: "darefox:dailyDareDate",
   dailyDareId: "darefox:dailyDareId",
   recentDareIds: "darefox:recentDareIds",
-  notificationsEnabled: "darefox:notificationsEnabled"
+  notificationsEnabled: "darefox:notificationsEnabled",
+  weeklySummaryEnabled: "darefox:weeklySummaryEnabled",
+  dailyNotificationId: "darefox:dailyNotificationId",
+  weeklySummaryNotificationId: "darefox:weeklySummaryNotificationId",
+  shieldAvailable: "darefox:shieldAvailable",
+  lastShieldUsedDate: "darefox:lastShieldUsedDate",
+  foxName: "darefox:foxName",
+  onboardingComplete: "darefox:onboardingComplete",
+  preferredCategory: "darefox:preferredCategory",
+  earnedBadges: "darefox:earnedBadges"
 } as const;
 
 const safeJsonParse = <T>(value: string | null, fallback: T): T => {

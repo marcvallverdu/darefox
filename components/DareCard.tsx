@@ -1,16 +1,18 @@
 import { Image, StyleSheet, Text, View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 import { Dare, categoryStyles } from "../lib/dares";
 
 const difficultyLabels = ["Comfort Zone", "Brave", "Legendary"] as const;
 
 export type DareCardProps = {
   dare: Dare;
+  animate?: boolean;
 };
 
-export const DareCard = ({ dare }: DareCardProps) => {
+export const DareCard = ({ dare, animate = false }: DareCardProps) => {
   const badgeStyle = categoryStyles[dare.category];
   return (
-    <View style={styles.card}>
+    <Animated.View style={styles.card} entering={animate ? FadeInUp.duration(500) : undefined}>
       <View style={[styles.badge, { backgroundColor: badgeStyle.background }]}> 
         <Text style={[styles.badgeText, { color: badgeStyle.text }]}>{dare.category}</Text>
       </View>
@@ -28,7 +30,7 @@ export const DareCard = ({ dare }: DareCardProps) => {
           );
         })}
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

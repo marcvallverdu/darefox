@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { Text } from "react-native";
+import * as Haptics from "expo-haptics";
 
 export default function TabsLayout() {
   return (
@@ -17,6 +18,11 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: "#C4A99A",
         tabBarLabelStyle: { fontSize: 12, fontWeight: "600" }
       }}
+      screenListeners={{
+        tabPress: () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+      }}
     >
       <Tabs.Screen
         name="index"
@@ -30,6 +36,13 @@ export default function TabsLayout() {
         options={{
           title: "History",
           tabBarIcon: ({ color }) => <TabIcon label="📜" color={color} />
+        }}
+      />
+      <Tabs.Screen
+        name="stats"
+        options={{
+          title: "Stats",
+          tabBarIcon: ({ color }) => <TabIcon label="📊" color={color} />
         }}
       />
       <Tabs.Screen
