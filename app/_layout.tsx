@@ -1,4 +1,4 @@
-import { Redirect, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -8,6 +8,7 @@ import { getJson } from "../lib/storage";
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const load = async () => {
@@ -18,12 +19,18 @@ export default function RootLayout() {
     load();
   }, []);
 
-  if (!ready) {
-    return <View style={styles.container} />;
-  }
+  useEffect(() => {
+    if (ready && !onboardingComplete) {
+      router.replace("/onboarding");
+    }
+  }, [ready, onboardingComplete, router]);
 
-  if (!onboardingComplete) {
-    return <Redirect href="/onboarding" />;
+  if (!ready) {
+    return (
+      <View style={styles.container}>
+        <StatusBar style="dark" />
+      </View>
+    );
   }
 
   return (
