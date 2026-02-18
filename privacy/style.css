@@ -1,0 +1,196 @@
+/* DareFox Privacy Policy — Styles */
+
+:root {
+  --cream: #FFF8F0;
+  --brown: #4A3728;
+  --brown-light: #6B5344;
+  --coral: #FF8C7C;
+  --coral-light: #FFB3A8;
+  --white: #FFFFFF;
+  --text: #2D1F17;
+  --text-muted: #7A6558;
+  --border: #E8D9CF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background-color: var(--brown);
+  color: var(--white);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.header-logo {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+header .subtitle {
+  color: var(--coral-light);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ── Main ── */
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ── No-data banner ── */
+.no-data-banner {
+  background-color: var(--brown);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.no-data-banner .icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Sections ── */
+section {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+}
+
+section h2 {
+  color: var(--brown);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+section h2 .section-icon {
+  font-size: 1.2rem;
+}
+
+section p {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+section p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Pill list ── */
+.pill-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pill-list li {
+  background-color: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  font-weight: 500;
+}
+
+.pill-list li::before {
+  content: "✕ ";
+  color: var(--coral);
+  font-weight: 700;
+}
+
+/* ── Contact section ── */
+.contact-section {
+  background-color: var(--brown);
+  color: var(--white);
+  border: none;
+}
+
+.contact-section h2 {
+  color: var(--white);
+}
+
+.contact-section p {
+  color: rgba(255,255,255,0.85);
+}
+
+.contact-section a {
+  color: var(--coral-light);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-section a:hover {
+  text-decoration: underline;
+}
+
+/* ── Effective date ── */
+.effective-date {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
+
+/* ── Footer ── */
+footer {
+  background-color: var(--brown);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.85rem;
+}
+
+footer span {
+  color: var(--coral);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  header h1 { font-size: 1.5rem; }
+  main { padding: 1.5rem 1rem 3rem; }
+  section { padding: 1.25rem; }
+}
